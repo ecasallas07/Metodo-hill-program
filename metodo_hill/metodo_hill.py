@@ -8,6 +8,7 @@ from rxconfig import config
 # Back-end
 class FormState(rx.State):
     form_data = {}
+    result = []
 
     def split_matrix(elements,n):
         arr=list(elements)
@@ -22,7 +23,6 @@ class FormState(rx.State):
         except np.linalg.LinAlgError as e:
             return str(e)
         
-    result =""
     def handle_submit(self, form_data: dict):
 
         alphabet = form_data["alphabet"]
@@ -39,8 +39,9 @@ class FormState(rx.State):
         
         # convert matrix key
         list = key.split(',') # se organizo por filas
-        matrix_key = self.split_matrix(list, n_matrix)
-        self.matrix_reverse(matrix_key)
+        
+        matrix_key = self.split_matrix(list,n_matrix)
+        self.result.append(self.matrix_reverse(matrix_key))
         
         
         
@@ -59,7 +60,7 @@ class FormState(rx.State):
             for i in message_list:
                 if i in alphabet.key():
                     message_numbers.append(alphabet.item())
-            self.split_matrix(message_numbers,n_matrix)
+            matrix_finish = self.split_matrix(message_numbers,n_matrix)
         elif alphabet[1:3] == 28:
             if 'ñ'.upper() in message_list:
                 message_list.remove('ñ'.upper())
@@ -70,8 +71,11 @@ class FormState(rx.State):
             for i in message_list:
                 if i in alphabet.key():
                     message_numbers.append(alphabet.item())
-            self.split_matrix(message_numbers,n_matrix)            
-
+            matrix_finish =self.split_matrix(message_numbers,n_matrix)            
+        np.transpose(matrix_finish)
+        self.update()
+    
+    print(result)    
 
 # Front-end
 def action_bar() -> rx.Component:
