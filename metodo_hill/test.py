@@ -46,11 +46,13 @@ class FormState:
             for i in range(len(matrix_inverse)):
                 for j in range(len(matrix_inverse[i])):
                     matrix_inverse[i][j] = matrix_inverse[i][j] % 28
-
-        print(matrix_inverse)
+                    
+        # matrix module finished            
+        matrix_inverse_int = [[int(round(matrix_inverse[i][j])) for j in range(len(matrix_inverse[i]))] for i in range(len(matrix_inverse))]
+        
         # Verification that message count is a multiple of n_matrix
         while True:
-            if len(message_list) % n_matrix != 0:
+            if len(message_list) % n_matrix != 0:   
                 message_list.append('_')
                 continue
             else:
@@ -78,11 +80,37 @@ class FormState:
         
         matrix_finish = self.split_matrix(message_numbers, n_matrix)
         matrix_finish = np.transpose(matrix_finish).tolist()
-        # numbers_matrix
-        # matrix_letters=matrix_finish
         
-        # multiply = np.dot (B,A)
-        # self.result.append(multiply)
+        # multiply matrix and inverse matrix  to decrypt message
+        multiply = np.dot(matrix_inverse_int,matrix_finish).tolist()
+        
+        if len(alphabet) == 27:
+            for i in range(len(multiply)):
+                for j in range(len(multiply[i])):
+                    multiply[i][j]= multiply[i][j] % 27
+        elif len(alphabet) == 28:
+            for i in range(len(multiply)):
+                for j in range(len(multiply[i])):
+                    multiply[i][j]= multiply[i][j] % 28                    
+                
+            
+        matrix_letters=np.transpose(multiply)
+        
+            
+        # invert alphabte for acces  to letters . how invert the dictionary
+        reversed_alphabet_dict = {v: k for k, v in alphabet_dict.items()}
+        
+        #matrix messagge decrypt
+        letter_decrypt= []
+                
+        for i in range(len(matrix_letters)):
+            for j in range(len(matrix_letters[i])):
+                num = matrix_letters[i][j]
+                if num in reversed_alphabet_dict:
+                    letter_decrypt.append(reversed_alphabet_dict[num])
+
+        self.result.append(letter_decrypt)
+        
         # Print the result
         print("Result:", self.result)
 
