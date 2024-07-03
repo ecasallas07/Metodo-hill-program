@@ -124,7 +124,7 @@ form_state = Decrypt()
 form_state.handle_submit(form_data_example)
 
 
-class Encrypt(Decrypt):
+class Encrypt:
     form_data = {}
     result = []
     
