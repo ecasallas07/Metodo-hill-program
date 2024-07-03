@@ -392,7 +392,7 @@ def decrypt_form():
                                     required=True,
                                 ),
                             rx.button(
-                                "Decrypt",
+                                "Encrypt",
                                 type_="submit",
                                 bg="#ecfdf5",
                                 background_color="#3683D5",
