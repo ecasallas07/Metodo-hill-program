@@ -124,13 +124,20 @@ class Decrypt(rx.State):
     
     
 class Encrypt(rx.State):
+    
+    
+    
     form_data = {}
     result = []
+
+    
+    def split_matrix(self, elements, n):
+        arr = list(elements)
+        return [arr[i:i+int(n)] for i in range(0, len(arr), int(n))]
     
     def handle_submit(self,form_data:dict):
-        self.form_data = form_data
-    
-    def encrypt_submit(self,form_data:dict):
+        
+        self.result = []
         alphabet =  form_data['alphabet']
         key = form_data['matrix_key']
         message = form_data['message']
@@ -316,10 +323,23 @@ def decrypt_form():
                                 "Decrypt",
                                 type_="submit",
                                 bg="#ecfdf5",
+                                background_color="#3683D5",
+                                border_radius="lg",
+                                margin_top="10px",
+                                cursor="pointer",
+                            ),
+                            rx.button(
+                                "Clear",
+                                type_="button",
+                                bg="#ecfdf5",
                                 background_color="#B74B4B",
                                 border_radius="lg",
                                 margin_top="10px",
                                 cursor="pointer",
+                                on_click=[
+                                    rx.set_value("message", ""),
+                                    rx.set_value("matrix_key", ""),
+                                ]
                             ),
                         ),
                         on_submit=Decrypt.handle_submit,
@@ -375,10 +395,23 @@ def decrypt_form():
                                 "Decrypt",
                                 type_="submit",
                                 bg="#ecfdf5",
+                                background_color="#3683D5",
+                                border_radius="lg",
+                                margin_top="10px",
+                                cursor="pointer",
+                            ),
+                             rx.button(
+                                "Clear",
+                                type_="button",
+                                bg="#ecfdf5",
                                 background_color="#B74B4B",
                                 border_radius="lg",
                                 margin_top="10px",
                                 cursor="pointer",
+                                on_click=[
+                                    rx.set_value("message", ""),
+                                    rx.set_value("matrix_key", ""),
+                                ]
                             ),
                         ),
                         on_submit=Encrypt.handle_submit,
@@ -400,4 +433,3 @@ def decrypt_form():
 app = rx.App()
 app.add_page(index)
 app.add_page(decrypt_form, route="/machine-hill")
-
